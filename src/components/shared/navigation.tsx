@@ -12,6 +12,7 @@ import {
   FlaskConical,
   Building2,
   Play,
+  Presentation,
   Menu,
   X,
   Zap,
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/evals", label: "Evals", icon: FlaskConical },
   { href: "/case-studies", label: "Case Studies", icon: Building2 },
   { href: "/playground", label: "Playground", icon: Play },
+  { href: "/present", label: "Present", icon: Presentation },
 ];
 
 export function Navigation() {
