@@ -11,7 +11,13 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Deploy IQ — Enterprise AI Deployment Toolkit",
   description:
-    "Plan, enable, and measure enterprise AI adoption with OpenAI's product suite. Built on OpenAI's published frameworks.",
+    "Plan, enable, and measure enterprise AI adoption with OpenAI's product suite. Assessment, deployment planning, workshops, ROI modeling, and eval strategy — built on OpenAI's published frameworks by Bill Mabry.",
+  openGraph: {
+    title: "Deploy IQ — Enterprise AI Deployment Toolkit",
+    description:
+      "Structured enterprise AI deployment using OpenAI's adoption framework. Assessment, planning, enablement, and measurement in one toolkit.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -31,7 +37,16 @@ export default function RootLayout({
                 Deploy IQ — Enterprise AI Deployment Toolkit
               </p>
               <p className="text-sm text-muted-foreground">
-                Built on OpenAI&apos;s published frameworks &amp; methodology
+                Built by{" "}
+                <a
+                  href="https://billmabry.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-foreground hover:text-primary transition-colors"
+                >
+                  Bill Mabry
+                </a>
+                {" "}using OpenAI&apos;s published frameworks
               </p>
             </div>
           </div>

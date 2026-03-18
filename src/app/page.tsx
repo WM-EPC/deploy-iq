@@ -245,7 +245,7 @@ export default function Home() {
       </section>
 
       {/* About / credibility */}
-      <section>
+      <section className="border-b border-border">
         <div className="mx-auto max-w-7xl px-6 py-16">
           <div className="mx-auto max-w-3xl">
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
@@ -263,19 +263,6 @@ export default function Home() {
                 training, measurement, and evaluation — so enterprises move from
                 curious to confident.
               </p>
-              <p>
-                Built by someone who has spent 15+ years making complex
-                technology land inside Fortune 500 organizations — from
-                designing certification systems at Salesforce, to driving $50M+
-                in realized value through structured adoption programs at
-                Celonis, to building production AI systems with OpenAI&apos;s
-                Realtime API and Agents SDK.
-              </p>
-              <p className="text-sm italic text-muted-foreground/60">
-                The through-line: take something complex, meet the audience
-                where they are, and make it land in a way that actually changes
-                behavior.
-              </p>
             </div>
             <div className="mt-8">
               <Link
@@ -286,6 +273,29 @@ export default function Home() {
                 Start Your Assessment
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Builder credit */}
+      <section>
+        <div className="mx-auto max-w-7xl px-6 py-12">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm text-muted-foreground">
+              Built by{" "}
+              <a
+                href="https://billmabry.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-foreground hover:text-primary transition-colors"
+              >
+                Bill Mabry
+              </a>{" "}
+              — using OpenAI&apos;s published frameworks and methodology
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground/50">
+              15+ years driving enterprise technology adoption at Salesforce, Celonis, and Fortune 500 consulting
+            </p>
           </div>
         </div>
       </section>

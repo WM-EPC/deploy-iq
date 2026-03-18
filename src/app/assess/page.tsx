@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Questionnaire } from "@/components/assessment/questionnaire";
+
+export const metadata: Metadata = {
+  title: "AI Maturity Assessment — Deploy IQ",
+  description: "Evaluate your organization's AI readiness across 7 dimensions. Maps to OpenAI's Align-Activate-Amplify-Accelerate-Govern framework.",
+};
 
 export default function AssessPage() {
   return (
