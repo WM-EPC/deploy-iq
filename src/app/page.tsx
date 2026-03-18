@@ -125,6 +125,18 @@ export default function Home() {
               Assess readiness, plan deployment, design workshops, calculate ROI,
               and build evaluation strategies — all in one toolkit.
             </p>
+            <p className="mt-3 text-sm text-muted-foreground/60">
+              A demo by{" "}
+              <a
+                href="https://billmabry.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                Bill Mabry
+              </a>
+              {" "}&middot; Built on OpenAI&apos;s published frameworks &amp; methodology
+            </p>
             <div className="mt-10 flex items-center justify-center gap-4">
               <Link
                 href="/assess"
