@@ -9,13 +9,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Deploy IQ — Enterprise AI Deployment Toolkit",
+  title: "Deploy IQ — AI Enablement Control Tower",
   description:
-    "Plan, enable, and measure enterprise AI adoption with OpenAI's product suite. Assessment, deployment planning, workshops, ROI modeling, and eval strategy — built on OpenAI's published frameworks by Bill Mabry.",
+    "Portfolio-scale AI enablement control tower for multi-platform training, governance, vendor coordination, champions, adoption analytics, and ROI measurement.",
   openGraph: {
-    title: "Deploy IQ — Enterprise AI Deployment Toolkit",
+    title: "Deploy IQ — AI Enablement Control Tower",
     description:
-      "Structured enterprise AI deployment using OpenAI's adoption framework. Assessment, planning, enablement, and measurement in one toolkit.",
+      "A portfolio operations command center for AI training, adoption, governance, and measurable value creation.",
     type: "website",
   },
 };
@@ -34,7 +34,7 @@ export default function RootLayout({
           <div className="mx-auto max-w-7xl px-6 py-8">
             <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
               <p className="text-sm text-muted-foreground">
-                Deploy IQ — Enterprise AI Deployment Toolkit
+                Deploy IQ — AI Enablement Control Tower
               </p>
               <p className="text-sm text-muted-foreground">
                 Built by{" "}
@@ -46,7 +46,7 @@ export default function RootLayout({
                 >
                   Bill Mabry
                 </a>
-                {" "}using OpenAI&apos;s published frameworks
+                {" "}for multi-platform portfolio AI enablement
               </p>
             </div>
           </div>

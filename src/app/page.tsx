@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
+  Radar,
   ClipboardCheck,
   Map,
   BookOpen,
@@ -23,35 +24,43 @@ import {
 
 const features = [
   {
+    href: "/control-tower",
+    icon: Radar,
+    title: "H.I.G. AI Enablement Control Tower",
+    description:
+      "Portfolio mission control for multi-platform training, vendor content, champions, compliance, adoption analytics, and ROI across H.I.G. and portfolio companies.",
+    badge: "New",
+  },
+  {
     href: "/assess",
     icon: ClipboardCheck,
-    title: "AI Maturity Assessment",
+    title: "Portfolio AI Maturity Assessment",
     description:
-      "Evaluate organizational readiness across 7 dimensions. Maps to OpenAI's Align-Activate-Amplify-Accelerate-Govern framework.",
+      "Evaluate company readiness across executive alignment, governance, tool access, AI fluency, champion coverage, and measurable value potential.",
     badge: "Start Here",
   },
   {
     href: "/plan",
     icon: Map,
-    title: "Deployment Planner",
+    title: "Enablement Roadmap Builder",
     description:
-      "Generate a customized adoption roadmap with phased rollout, RACI matrices, KPIs, and risk mitigation — powered by GPT.",
+      "Generate phased adoption plans by company tier, audience, platform stack, compliance needs, operating sponsor, and business outcome.",
     badge: null,
   },
   {
     href: "/workshops",
     icon: BookOpen,
-    title: "Workshop Library",
+    title: "Multi-Platform Curriculum",
     description:
-      "9 ready-to-deliver training templates from Executive AI Briefings to API Bootcamps, built on OpenAI Academy formats.",
+      "Role-based paths spanning ToltIQ, ChatGPT, Claude, Copilot/Gemini, API/agents, governance, and AI champions.",
     badge: null,
   },
   {
     href: "/roi",
     icon: Calculator,
-    title: "ROI Calculator",
+    title: "Adoption & ROI Calculator",
     description:
-      "Connect OpenAI products to concrete business outcomes using published case study benchmarks from Klarna, Morgan Stanley, and Stripe.",
+      "Connect training completion and workflow adoption to time savings, cycle-time reduction, margin expansion, and value creation evidence.",
     badge: null,
   },
   {
@@ -81,27 +90,27 @@ const features = [
 ];
 
 const stats = [
-  { value: "75%", label: "of enterprises report positive AI ROI", source: "Wharton Study" },
-  { value: "8x", label: "YoY growth in Enterprise AI messages", source: "OpenAI 2025 Report" },
-  { value: "95%", label: "of AI pilots fail to scale beyond experimental", source: "Industry Data" },
-  { value: "6x", label: "more messages from frontier vs. median workers", source: "OpenAI 2025 Report" },
+  { value: "100+", label: "portfolio companies to segment and enable", source: "Portfolio Ops Scale" },
+  { value: "5+", label: "frontier and approved AI platforms to train", source: "Multi-Platform Stack" },
+  { value: "40%", label: "travel and direct delivery requirement", source: "Role Signal" },
+  { value: "1", label: "central operating view for adoption and ROI", source: "Control Tower" },
 ];
 
 const pillars = [
   {
     icon: Target,
-    title: "Align & Activate",
-    description: "Executive alignment, stakeholder mapping, structured skill-building, and AI Champions networks.",
+    title: "Segment & Mobilize",
+    description: "Classify portfolio companies into lighthouse, cohort, and foundation paths with sponsors and champions.",
   },
   {
     icon: TrendingUp,
-    title: "Amplify & Accelerate",
-    description: "Scale wins across the organization. Move from pilot to production with clear intake and prioritization.",
+    title: "Train & Operationalize",
+    description: "Coordinate multi-platform curricula, vendor deliverables, calendars, office hours, and hands-on labs.",
   },
   {
     icon: Shield,
-    title: "Govern",
-    description: "Responsible AI practices that enable speed. Policy GPTs, quarterly reviews, and agent governance.",
+    title: "Measure & Govern",
+    description: "Track completion, adoption, risk, content freshness, use case movement, and ROI evidence.",
   },
 ];
 
@@ -114,16 +123,17 @@ export default function Home() {
         <div className="relative mx-auto max-w-7xl px-6 py-24 lg:py-32">
           <div className="mx-auto max-w-3xl text-center">
             <Badge variant="secondary" className="mb-6">
-              Built on OpenAI&apos;s Published Frameworks
+              H.I.G. Portfolio Operations Demo
             </Badge>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Enterprise AI Deployment,{" "}
-              <span className="text-primary">Structured</span>
+              Portfolio AI Enablement,{" "}
+              <span className="text-primary">Commanded</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-muted-foreground">
-              Turn OpenAI&apos;s product suite into measurable business value.
-              Assess readiness, plan deployment, design workshops, calculate ROI,
-              and build evaluation strategies — all in one toolkit.
+              A control tower for training and adoption across H.I.G., its offices,
+              vendors, champions, and portfolio companies. Coordinate ToltIQ,
+              ChatGPT, Claude, Copilot/Gemini, API/agents, governance, and ROI in
+              one operating system.
             </p>
             <p className="mt-3 text-sm text-muted-foreground/60">
               A demo by{" "}
@@ -139,17 +149,17 @@ export default function Home() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-4">
               <Link
-                href="/assess"
+                href="/control-tower"
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Start Assessment
+                Enter Control Tower
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/case-studies"
                 className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-background px-6 text-sm font-medium transition-colors hover:bg-muted"
               >
-                View Case Studies
+                View Proof Points
               </Link>
             </div>
           </div>
@@ -182,12 +192,12 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 py-16">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              OpenAI&apos;s Enterprise Adoption Framework
+              Portfolio Enablement Operating Model
             </h2>
             <p className="mt-3 text-muted-foreground">
-              From &ldquo;Staying Ahead in the Age of AI&rdquo; — a structured
-              approach to moving enterprises from initial exposure to confident,
-              scalable use.
+              Treat AI training as a value-creation program: segment the portfolio,
+              train across approved platforms, govern safe use, and report measurable
+              adoption outcomes.
             </p>
           </div>
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
@@ -217,11 +227,11 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 py-16">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              Your Deployment Toolkit
+              Your Enablement Operating System
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Every tool an AI Deployment Manager needs — from first customer
-              conversation to scaled production adoption.
+              The current Deploy IQ modules become the support system around the new
+              control tower: assessment, roadmap, curriculum, ROI, evals, and proof.
             </p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

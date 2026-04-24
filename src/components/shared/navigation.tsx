@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import {
+  Radar,
   ClipboardCheck,
   Map,
   BookOpen,
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 
 const navItems = [
+  { href: "/control-tower", label: "Control Tower", icon: Radar },
   { href: "/assess", label: "Assess", icon: ClipboardCheck },
   { href: "/plan", label: "Plan", icon: Map },
   { href: "/workshops", label: "Workshops", icon: BookOpen },
