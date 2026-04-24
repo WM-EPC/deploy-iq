@@ -45,6 +45,7 @@ import {
   type RiskLevel,
   valuePipeline,
   vendorDeliverables,
+  type CommandSignal,
 } from "@/lib/hig-control-tower-data";
 import {
   Tabs,
@@ -75,6 +76,8 @@ const platformFilters: Array<PlatformKey | "All"> = [
 
 const levelOrder = ["Executive", "Foundation", "Practitioner", "Power User", "Champion"];
 
+type DetailTab = "portfolio" | "calendar" | "curriculum" | "champions" | "vendors" | "roi";
+
 const platformColors: Record<PlatformKey, string> = {
   ToltIQ: "text-[#78f4e6] border-[#78f4e6]/30 bg-[#78f4e6]/10",
   ChatGPT: "text-[#b6f6c7] border-[#b6f6c7]/30 bg-[#b6f6c7]/10",
@@ -91,6 +94,7 @@ export default function ControlTowerPage() {
   const [platformFilter, setPlatformFilter] = useState<PlatformKey | "All">("All");
   const [selectedCompanyId, setSelectedCompanyId] = useState("amsive");
   const [signalFilter, setSignalFilter] = useState("All");
+  const [activeDetailTab, setActiveDetailTab] = useState<DetailTab>("portfolio");
 
   const filteredCompanies = useMemo(() => {
     return portfolioCompanies.filter((company) => {
@@ -108,15 +112,55 @@ export default function ControlTowerPage() {
     (signal) => signalFilter === "All" || signal.category === signalFilter
   );
 
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  const openDetailTab = (tab: DetailTab) => {
+    setActiveDetailTab(tab);
+    window.setTimeout(() => scrollToSection("ops-detail"), 0);
+  };
+
+  const activateSignal = (signal: CommandSignal) => {
+    setSignalFilter(signal.category);
+
+    if (signal.priority === "High") {
+      setRiskFilter("High");
+    }
+
+    if (signal.category === "Training") {
+      openDetailTab("calendar");
+    } else if (signal.category === "Vendor") {
+      openDetailTab("vendors");
+    } else if (signal.category === "ROI") {
+      openDetailTab("roi");
+    } else if (signal.category === "Compliance" || signal.category === "Risk") {
+      setSelectedCompanyId("brightstar");
+      scrollToSection("portfolio-universe");
+    } else if (signal.category === "Growth") {
+      setSelectedCompanyId("3pillar");
+      scrollToSection("portfolio-universe");
+    }
+  };
+
   return (
-    <div className="min-h-screen overflow-hidden bg-[#020806] text-[#ecfff8]">
+    <div id="control-tower-top" className="min-h-screen overflow-hidden bg-[#020806] text-[#ecfff8]">
       <div className="pointer-events-none fixed inset-0 opacity-80">
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(119,244,230,0.04)_1px,transparent_1px),linear-gradient(180deg,rgba(119,244,230,0.04)_1px,transparent_1px)] bg-[size:42px_42px]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,rgba(39,155,119,0.22),transparent_34%),linear-gradient(180deg,rgba(2,8,6,0.25),#020806_72%)]" />
       </div>
 
       <div className="relative mx-auto flex max-w-[1760px] gap-4 px-4 py-4 sm:px-5 lg:px-6">
-        <CommandRail />
+        <CommandRail
+          onScrollTop={() => scrollToSection("control-tower-top")}
+          onScrollUniverse={() => scrollToSection("portfolio-universe")}
+          onOpenDetailTab={openDetailTab}
+          onScrollPlatform={() => scrollToSection("platform-stack")}
+          onScrollPlan={() => scrollToSection("ninety-day-plan")}
+        />
 
         <div className="min-w-0 flex-1 space-y-4">
           <header className="flex flex-col gap-4 rounded-lg border border-[#16372f] bg-[#05110f]/86 p-4 shadow-[0_0_0_1px_rgba(120,244,230,0.04),0_24px_80px_rgba(0,0,0,0.42)] lg:flex-row lg:items-center lg:justify-between">
@@ -181,12 +225,12 @@ export default function ControlTowerPage() {
             </div>
           </header>
 
-          <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_460px]">
+          <section id="portfolio-universe" className="scroll-mt-24 grid gap-4 xl:grid-cols-[minmax(0,1fr)_460px]">
             <MissionPanel className="min-h-[620px]">
               <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <PanelTitle
                   icon={Radar}
-                  eyebrow="AI maturity x ROI potential"
+                  eyebrow="Y = readiness, X = estimated value opportunity"
                   title="Portfolio Universe"
                 />
                 <div className="flex flex-wrap gap-2">
@@ -264,21 +308,29 @@ export default function ControlTowerPage() {
 
               <div className="space-y-2">
                 {visibleSignals.map((signal) => (
-                  <CommandSignalRow key={signal.id} signal={signal} />
+                  <CommandSignalRow
+                    key={signal.id}
+                    signal={signal}
+                    onActivate={() => activateSignal(signal)}
+                  />
                 ))}
               </div>
             </MissionPanel>
           </section>
 
-          <section className="grid gap-4 xl:grid-cols-[400px_minmax(0,1fr)_minmax(420px,0.9fr)]">
+          <section id="platform-stack" className="scroll-mt-24 grid gap-4 xl:grid-cols-[400px_minmax(0,1fr)_minmax(420px,0.9fr)]">
             <PlatformStackPanel />
             <AdoptionPulsePanel metrics={metrics} />
             <ValuePipelinePanel />
           </section>
 
-          <OperationsTabs selectedCompanyId={selectedCompanyId} />
+          <OperationsTabs
+            selectedCompanyId={selectedCompanyId}
+            activeTab={activeDetailTab}
+            onTabChange={setActiveDetailTab}
+          />
 
-          <section className="grid gap-4 lg:grid-cols-3">
+          <section id="ninety-day-plan" className="scroll-mt-24 grid gap-4 lg:grid-cols-3">
             {firstNinetyDays.map((phase) => (
               <MissionPanel key={phase.phase} className="min-h-[230px]">
                 <div className="mb-3 text-xs text-[#78f4e6]">{phase.phase}</div>
@@ -295,7 +347,7 @@ export default function ControlTowerPage() {
             ))}
           </section>
 
-          <section className="rounded-lg border border-[#245346] bg-[#06130f]/92 p-5">
+          <section id="narrative" className="scroll-mt-24 rounded-lg border border-[#245346] bg-[#06130f]/92 p-5">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <div className="mb-2 text-xs text-[#78f4e6]">
@@ -323,16 +375,29 @@ export default function ControlTowerPage() {
   );
 }
 
-function CommandRail() {
+function CommandRail({
+  onScrollTop,
+  onScrollUniverse,
+  onOpenDetailTab,
+  onScrollPlatform,
+  onScrollPlan,
+}: {
+  onScrollTop: () => void;
+  onScrollUniverse: () => void;
+  onOpenDetailTab: (tab: DetailTab) => void;
+  onScrollPlatform: () => void;
+  onScrollPlan: () => void;
+}) {
   const railItems = [
-    { label: "Control Tower", icon: Radar, active: true },
-    { label: "Portfolio", icon: BriefcaseBusiness },
-    { label: "Calendar", icon: CalendarDays },
-    { label: "Curriculum", icon: GraduationCap },
-    { label: "Champions", icon: Users },
-    { label: "Vendors", icon: DatabaseZap },
-    { label: "ROI", icon: TrendingUp },
-    { label: "Assessments", icon: ShieldCheck },
+    { label: "Control Tower", icon: Radar, active: true, action: onScrollTop },
+    { label: "Universe", icon: BriefcaseBusiness, action: onScrollUniverse },
+    { label: "Calendar", icon: CalendarDays, action: () => onOpenDetailTab("calendar") },
+    { label: "Curriculum", icon: GraduationCap, action: () => onOpenDetailTab("curriculum") },
+    { label: "Champions", icon: Users, action: () => onOpenDetailTab("champions") },
+    { label: "Vendors", icon: DatabaseZap, action: () => onOpenDetailTab("vendors") },
+    { label: "Platform Stack", icon: Cpu, action: onScrollPlatform },
+    { label: "ROI", icon: TrendingUp, action: () => onOpenDetailTab("roi") },
+    { label: "90-Day Plan", icon: ShieldCheck, action: onScrollPlan },
   ];
 
   return (
@@ -351,6 +416,7 @@ function CommandRail() {
           return (
             <button
               key={item.label}
+              onClick={item.action}
               className={cn(
                 "flex w-full items-center gap-3 rounded-md border px-3 py-2.5 text-left text-xs transition",
                 item.active
@@ -511,40 +577,58 @@ function PortfolioUniverse({
   selectedCompanyId: string;
   onSelect: (id: string) => void;
 }) {
+  const values = portfolioCompanies.map((company) => company.roiPotential);
+  const minValue = Math.min(...values);
+  const maxValue = Math.max(...values);
+  const valueRange = Math.max(maxValue - minValue, 1);
+
   return (
-    <div className="relative min-h-[440px] overflow-hidden rounded-lg border border-[#14332c] bg-[#030b09]">
+    <div className="relative min-h-[470px] overflow-hidden rounded-lg border border-[#14332c] bg-[#030b09]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(120,244,230,0.12),transparent_20%),radial-gradient(circle_at_center,transparent_0,transparent_21%,rgba(120,244,230,0.12)_21.4%,transparent_22%,transparent_38%,rgba(120,244,230,0.09)_38.4%,transparent_39%,transparent_55%,rgba(120,244,230,0.06)_55.4%,transparent_56%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_49.8%,rgba(120,244,230,0.16)_50%,transparent_50.2%),linear-gradient(180deg,transparent_49.8%,rgba(120,244,230,0.16)_50%,transparent_50.2%)]" />
       <div className="absolute left-5 top-8 bottom-8 flex w-10 flex-col items-center justify-between text-xs text-[#8aa99f]">
-        <span>HIGH</span>
-        <span className="-rotate-90 whitespace-nowrap text-[#b3d0c7]">AI MATURITY</span>
-        <span>LOW</span>
+        <span>READY</span>
+        <span className="-rotate-90 whitespace-nowrap text-[#b3d0c7]">READINESS INDEX</span>
+        <span>RAW</span>
       </div>
       <div className="absolute bottom-4 left-[18%] right-[12%] flex items-center justify-between text-xs text-[#8aa99f]">
-        <span>LOW ROI POTENTIAL</span>
-        <span>HIGH ROI POTENTIAL</span>
+        <span>LOWER VALUE POTENTIAL</span>
+        <span>HIGHER VALUE POTENTIAL</span>
       </div>
-      <div className="absolute left-[17%] top-8 rounded-full border border-[#204d42] px-3 py-1 text-xs text-[#8aa99f]">
-        Business Services
+      <div className="absolute left-[16%] top-8 max-w-[210px] rounded-md border border-[#204d42] bg-[#04100d]/80 px-3 py-2">
+        <div className="text-xs font-medium text-[#d8f2ea]">Standardize</div>
+        <div className="text-[11px] leading-4 text-[#8aa99f]">High readiness, lower near-term value</div>
       </div>
-      <div className="absolute right-[22%] top-8 rounded-full border border-[#204d42] px-3 py-1 text-xs text-[#8aa99f]">
-        Technology
+      <div className="absolute right-[10%] top-8 max-w-[210px] rounded-md border border-[#35f49c]/35 bg-[#35f49c]/10 px-3 py-2">
+        <div className="text-xs font-medium text-[#b6f6c7]">Scale Now</div>
+        <div className="text-[11px] leading-4 text-[#8aa99f]">Lighthouse proof, champions, ROI capture</div>
       </div>
-      <div className="absolute bottom-12 left-[20%] rounded-full border border-[#204d42] px-3 py-1 text-xs text-[#8aa99f]">
-        Healthcare
+      <div className="absolute bottom-12 left-[16%] max-w-[210px] rounded-md border border-[#ff735d]/30 bg-[#ff735d]/10 px-3 py-2">
+        <div className="text-xs font-medium text-[#ffb8ad]">Foundation First</div>
+        <div className="text-[11px] leading-4 text-[#8aa99f]">Safe use, sponsor, required training</div>
       </div>
-      <div className="absolute bottom-12 right-[18%] rounded-full border border-[#204d42] px-3 py-1 text-xs text-[#8aa99f]">
-        Logistics
+      <div className="absolute bottom-12 right-[9%] max-w-[220px] rounded-md border border-[#f1c35b]/30 bg-[#f1c35b]/10 px-3 py-2">
+        <div className="text-xs font-medium text-[#ffe2a3]">Unlock Value</div>
+        <div className="text-[11px] leading-4 text-[#8aa99f]">Sponsor + use case before scaling</div>
       </div>
 
       {companies.map((company) => {
         const selected = selectedCompanyId === company.id;
+        const x =
+          16 + ((company.roiPotential - minValue) / valueRange) * 70;
+        const readiness =
+          company.maturityScore * 0.45 +
+          company.adoptionScore * 0.3 +
+          company.trainingCompletion * 0.15 +
+          company.championCoverage * 0.1;
+        const y = 84 - readiness * 0.72;
+        const labelToLeft = x > 72;
 
         return (
           <button
             key={company.id}
             className="absolute z-10 -translate-x-1/2 -translate-y-1/2 text-left outline-none"
-            style={{ left: `${company.coordinates.x}%`, top: `${company.coordinates.y}%` }}
+            style={{ left: `${x}%`, top: `${y}%` }}
             onClick={() => onSelect(company.id)}
             aria-label={`Select ${company.name}`}
           >
@@ -564,7 +648,12 @@ function PortfolioUniverse({
               />
               <CircleDot className={cn("h-4 w-4", tierTextClass(company.enablementTier))} />
             </span>
-            <span className="absolute left-10 top-0 min-w-[130px]">
+            <span
+              className={cn(
+                "absolute top-0 min-w-[130px]",
+                labelToLeft ? "right-10 text-right" : "left-10"
+              )}
+            >
               <span className="block text-sm font-medium text-white">{company.name}</span>
               <span className={cn("text-xs", tierTextClass(company.enablementTier))}>
                 {company.enablementTier}
@@ -598,10 +687,10 @@ function TierLegend({ tierCounts }: { tierCounts: Record<EnablementTier, number>
         ))}
       </div>
       <div className="mt-5 border-t border-[#173a32] pt-4">
-        <div className="mb-2 text-xs text-[#78998f]">Operating Rule</div>
+        <div className="mb-2 text-xs text-[#78998f]">Map Logic</div>
         <p className="text-xs leading-5 text-[#a9c7bd]">
-          Lighthouse companies generate proof. Cohorts scale patterns. Foundation
-          companies receive safe-use baselines first.
+          Each company is placed by readiness index and estimated value potential.
+          Quadrants decide whether to scale, standardize, unlock, or stabilize first.
         </p>
       </div>
     </div>
@@ -676,8 +765,10 @@ function StripMetric({
 
 function CommandSignalRow({
   signal,
+  onActivate,
 }: {
-  signal: (typeof commandSignals)[number];
+  signal: CommandSignal;
+  onActivate: () => void;
 }) {
   const iconClass = {
     Risk: "text-[#ff735d] border-[#ff735d]/30 bg-[#ff735d]/10",
@@ -700,7 +791,11 @@ function CommandSignalRow({
             : TrendingUp;
 
   return (
-    <button className="group flex w-full items-start gap-3 rounded-md border border-[#173a32] bg-[#071411] p-3 text-left transition hover:border-[#78f4e6]/45 hover:bg-[#0a1d18]">
+    <button
+      className="group flex w-full items-start gap-3 rounded-md border border-[#173a32] bg-[#071411] p-3 text-left transition hover:border-[#78f4e6]/45 hover:bg-[#0a1d18] focus-visible:border-[#78f4e6] focus-visible:outline-none"
+      onClick={onActivate}
+      title="Open related operating view"
+    >
       <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-md border", iconClass)}>
         <Icon className="h-4 w-4" />
       </span>
@@ -878,12 +973,21 @@ function ValuePipelinePanel() {
   );
 }
 
-function OperationsTabs({ selectedCompanyId }: { selectedCompanyId: string }) {
+function OperationsTabs({
+  selectedCompanyId,
+  activeTab,
+  onTabChange,
+}: {
+  selectedCompanyId: string;
+  activeTab: DetailTab;
+  onTabChange: (tab: DetailTab) => void;
+}) {
   const selectedCompany = getCompanyById(selectedCompanyId);
 
   return (
     <MissionPanel>
-      <Tabs defaultValue="portfolio" className="gap-4">
+      <div id="ops-detail" className="scroll-mt-24" />
+      <Tabs value={activeTab} onValueChange={(value) => onTabChange(value as DetailTab)} className="gap-4">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <PanelTitle
             icon={Network}
